@@ -26,15 +26,7 @@ Run `watnote` to make a new file for today. If today's file exists it makes no c
 
 watnote config is store in .watconfig.json in your home directory
 
-``` JSON
-{
-  "NotesDir": "C:\\notes",
-  "BackupDir": "",
-  "ShouldStartEditor": true,
-  "EditorCmd": "C:\\Users\\USERNAME\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
-  "EditorArgs": "%FOLDERPATH% --goto %FILEPATH%"
-}
-```
+
 
 `NotesDir` is where your notes are stored in a hirarchy of year/month/YYYY-MM-DD.md
 
@@ -45,3 +37,27 @@ watnote config is store in .watconfig.json in your home directory
 `EditorCmd` is your editor
 
 `EditorArgs` is the arg string you want to pass into your editor. It has two replacement strings. `%FOLDERPATH%` is the NotesDir path. `%FILEPATH%` is the the path of the new note.
+
+An example Windows config:
+
+``` JSON
+{
+  "NotesDir": "C:\\notes",
+  "BackupDir": "",
+  "ShouldStartEditor": true,
+  "EditorCmd": "C:\\Users\\USERNAME\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe",
+  "EditorArgs": "%FOLDERPATH% --goto %FILEPATH%"
+}
+```
+
+An example Linux config:
+
+``` JSON
+{
+  "NotesDir": "/home/davidmn/notes",
+  "BackupDir": "",
+  "ShouldStartEditor": true,
+  "EditorCmd": "code",
+  "EditorArgs": "%FOLDERPATH% --goto %FILEPATH%"
+}
+```
