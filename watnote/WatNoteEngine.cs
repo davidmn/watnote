@@ -8,11 +8,11 @@ namespace watnote
 {
     public class WatNoteEngine
     {
-        private string _configPath;
-        private Configuration _configuration;
+        private ConfigManager _configManager;
         public WatNoteEngine()
         {
-            LoadConfig();
+            var path = GetConfigPath();
+            _configManager = new ConfigManager(path);
         }
 
         public void NewNote()
@@ -22,7 +22,7 @@ namespace watnote
 
             var pathElements = new List<string>
             {
-                _configuration.NotesDir,
+                _configManager.Configuration.NotesDir,
                 $"{dateTime.Year}",
                 $"{dateTime.Month:D2}"
             };
@@ -39,13 +39,13 @@ namespace watnote
                 File.WriteAllText(filePath, title);
             }
 
-            if (_configuration.ShouldStartEditor)
+            if (_configManager.Configuration.ShouldStartEditor)
             {
                 Console.WriteLine($"Opening note {filePath}...");
 
-                var args = _configuration.EditorArgs.Replace("%FOLDERPATH%", directoryPath)
+                var args = _configManager.Configuration.EditorArgs.Replace("%FOLDERPATH%", directoryPath)
                     .Replace("%FILEPATH%", filePath);
-                var p = Process.Start(_configuration.EditorCmd, args);
+                var p = Process.Start(_configManager.Configuration.EditorCmd, args);
             }
         }
 
@@ -56,61 +56,14 @@ namespace watnote
 
         public void Config()
         {
-            if (_configuration.ShouldStartEditor)
-            {
-                Console.WriteLine("Opening config...");
-                try
-                {
-                    var p = Process.Start(_configuration.EditorCmd, _configPath);
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine("Couldn't open editor, dumping settings");
-                    PrintConfig();
-                }
-            }
-            else
-            {
-                PrintConfig();
-            }
+            _configManager.OpenConfig();
         }
 
-        private void PrintConfig()
-        {
-            var configText = File.ReadAllText(_configPath);
-            Console.Write(configText);
-            Console.WriteLine();
-        }
-
-        private void LoadConfig()
+        private string GetConfigPath()
         {
             var homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            _configPath = Path.Combine(homeDir, ".watconf.json");
-
-            if (!File.Exists(_configPath))
-            {
-                var defaultConfig = CreateDefaultConfig();
-                var options = new JsonSerializerOptions { WriteIndented = true };
-                string jsonString = JsonSerializer.Serialize(defaultConfig, options);
-                File.WriteAllText(_configPath, jsonString);
-            }
-
-            var configText = File.ReadAllText(_configPath);
-            var config = JsonSerializer.Deserialize<Configuration>(configText);
-            _configuration = config;
-        }
-
-        private Configuration CreateDefaultConfig()
-        {
-            var conf = new Configuration
-            {
-                NotesDir = @"C:\Repos\notes",
-                BackupDir = "",
-                ShouldStartEditor = false,
-                EditorCmd = "",
-                EditorArgs = ""
-            };
-            return conf;
+            var path = Path.Combine(homeDir, ".watconf.json");
+            return path;
         }
     }
 }

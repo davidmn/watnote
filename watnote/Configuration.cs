@@ -11,5 +11,18 @@
         public string EditorCmd { get; set; }
 
         public string EditorArgs { get; set; }
+        
+        public Configuration CreateDefault()
+        {
+            var conf = new Configuration
+            {
+                NotesDir = @"C:\Repos\notes",
+                BackupDir = "",
+                ShouldStartEditor = false,
+                EditorCmd = "",
+                EditorArgs = ""
+            };
+            return conf;
+        }
     }
 }
