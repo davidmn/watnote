@@ -18,17 +18,8 @@ namespace watnote
         
         public Configuration CreateDefault()
         {
+            var notesDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),"notes");
 
-            var isWindows = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-            var notesDir = String.Empty;
-            if (isWindows)
-            {
-                notesDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),"notes");
-            }
-            else
-            {
-                notesDir = "~/notes/";
-            }
             var conf = new Configuration
             {
                 NotesDir = notesDir,
