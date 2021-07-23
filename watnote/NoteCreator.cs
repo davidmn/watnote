@@ -7,9 +7,9 @@ namespace watnote
 {
     public static class NoteCreator
     {
-        public static void CreateNote(Configuration configuration)
+        public static void CreateNote(Configuration configuration, bool silent)
         {
-            Console.WriteLine("Creating new note...");
+            WriteLine("Creating new note...", silent);
             var dateTime = DateTime.Now;
 
             var pathElements = new List<string>
@@ -25,7 +25,7 @@ namespace watnote
 
             if (!File.Exists(filePath))
             {
-                Console.WriteLine($"Creating note {filePath}...");
+                WriteLine($"Creating note {filePath}...", silent);
                 Directory.CreateDirectory(directoryPath);
                 var title = $@"# {dateTime.Year}-{dateTime.Month:D2}-{dateTime.Day:D2}" + Environment.NewLine;
                 File.WriteAllText(filePath, title);
@@ -33,11 +33,19 @@ namespace watnote
 
             if (configuration.ShouldStartEditor)
             {
-                Console.WriteLine($"Opening note {filePath}...");
+                WriteLine($"Opening note {filePath}...", silent);
 
                 var args = configuration.EditorArgs.Replace("%FOLDERPATH%", directoryPath)
                     .Replace("%FILEPATH%", filePath);
                 Process.Start(configuration.EditorCmd, args);
+            }
+        }
+        
+        private static void WriteLine(string text, bool silent)
+        {
+            if (!silent)
+            {
+                Console.WriteLine(text);
             }
         }
     }
