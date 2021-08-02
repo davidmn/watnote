@@ -35,7 +35,7 @@ namespace watnote
             {
                 WriteLine($"Opening note {filePath}...", silent);
 
-                var args = configuration.EditorArgs.Replace("%FOLDERPATH%", directoryPath)
+                var args = configuration.EditorArgs.Replace("%FOLDERPATH%", configuration.NotesDir)
                     .Replace("%FILEPATH%", filePath);
                 Process.Start(configuration.EditorCmd, args);
             }
