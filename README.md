@@ -50,11 +50,11 @@ An example Windows config:
 }
 ```
 
-An example Linux config:
+An example WSL config (assumes you have the WSL plugin for VSCode in your windows install):
 
 ``` JSON
 {
-  "NotesDir": "/home/davidmn/notes",
+  "NotesDir": "/mnt/c/Repos/notes",
   "BackupDir": "",
   "ShouldStartEditor": true,
   "EditorCmd": "code",
