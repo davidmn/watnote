@@ -37,7 +37,15 @@ namespace watnote
 
                 var args = configuration.EditorArgs.Replace("%FOLDERPATH%", configuration.NotesDir)
                     .Replace("%FILEPATH%", filePath);
-                Process.Start(configuration.EditorCmd, args);
+                
+                var startInfo = new ProcessStartInfo
+                {
+                    Arguments = args,
+                    FileName = configuration.EditorCmd,
+                    UseShellExecute = true
+                };
+                
+                Process.Start(startInfo);
             }
         }
         
